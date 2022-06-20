@@ -1,4 +1,4 @@
-# @ts-delight/pipe
+# fluent-piper
 
 Type-safe left-to-right functional pipeline composition
 
@@ -11,14 +11,18 @@ Type-safe left-to-right functional pipeline composition
 
 ## Installation
 
-npm install --save @ts-delight/pipe
+npm: 
+
+```
+npm install fluent-piper
+```
 
 ## Usage
 
 ### Eager evaluation
 
 ```typescript
-import {pipe} from "@ts-delight/pipe";
+import {pipe} from "fluent-piper";
 
 const result = pipe(10).thru((i: number) => i + 1).thru((i: number) => `Result: ${i}`).value;
 //                   |           ^
@@ -37,7 +41,7 @@ const result = pipe(10).thru((i: number) => i + 1).thru((i: number) => `Result: 
 ### Eager evaluation with async steps
 
 ```typescript
-import {pipe} from "@ts-delight/pipe";
+import {pipe} from "fluent-piper";
 
 const result = pipe(10)
     .thruAsync(async (i: number) => i + 1)
@@ -49,7 +53,7 @@ const result = pipe(10)
 ### Lazy evaluation with sync steps
 
 ```typescript
-import {pipeFn} from "@ts-delight/pipe";
+import {pipeFn} from "fluent-piper";
 
 const {fn} = pipeFn()
     .thru((i: number) => i + 1)
@@ -62,7 +66,7 @@ fn(10); // => "Result: 11"
 ### Lazy evaluation with async steps
 
 ```typescript
-import {pipeFnAsync} from "@ts-delight/pipe";
+import {pipeFnAsync} from "fluent-piper";
 
 const {fn} = pipeFnAsync()
     .thru(async (i: number) => i + 1)
