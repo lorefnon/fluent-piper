@@ -30,7 +30,7 @@
     "trailingComma": "es5"
   },
   "devDependencies": {
-    "@types/jest": "^28.1.2",
+    "@types/jest": "^28.1.6",
     "husky": "^8.0.1",
     "prettier": "^2.7.1",
     "pretty-quick": "^3.1.3",
