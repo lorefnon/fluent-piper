@@ -1,9 +1,10 @@
 {
   "include": ["src", "types"],
   "compilerOptions": {
-    "target": "es5",
+    "target": "es2022",
     "module": "esnext",
     "lib": ["dom", "esnext"],
+    "outDir": "dist",
     "importHelpers": true,
     "declaration": true,
     "sourceMap": true,

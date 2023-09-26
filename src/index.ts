@@ -1,18 +1,17 @@
-type Resolved<T> = T extends Promise<infer ResultT> ? ResultT : T;
 type AnyToUnknown<T> = unknown extends T ? unknown : T;
 type IsNever<T, LeftT, RightT> = AnyToUnknown<T> extends never ? LeftT : RightT;
 
 export interface PipeStep<T> {
   value: T;
   thru: <T2>(op: (i: T) => T2) => PipeStep<T2>;
-  thruAsync: <T2>(op: (i: Resolved<T>) => T2) => PipeStep<Promise<Resolved<T2>>>;
+  thruAsync: <T2>(op: (i: Awaited<T>) => T2) => PipeStep<Promise<Awaited<T2>>>;
 }
 
 export const pipe = <T>(val: T): PipeStep<T> => ({
   value: val,
   thru: <T2>(op: (i: T) => T2) => pipe(op(val)),
-  thruAsync: <T2>(op: (i: Resolved<T>) => T2) =>
-    pipe<Promise<Resolved<T2>>>(Promise.resolve<any>(val).then<any>(op)),
+  thruAsync: <T2>(op: (i: Awaited<T>) => T2) =>
+    pipe<Promise<Awaited<T2>>>(Promise.resolve<any>(val).then<any>(op)),
 });
 
 export interface PipeFn<InputT = never, OutputT = never> {
@@ -52,14 +51,14 @@ export interface PipeFnAsync<InputT = never, OutputT = never> {
   fn: IsNever<
     InputT,
     () => undefined,
-    (i: InputT) => Promise<Resolved<OutputT>>
+    (i: InputT) => Promise<Awaited<OutputT>>
   >;
   thru: <
     NextOutputT,
-    StepInputT extends IsNever<InputT, any, Resolved<OutputT>>
+    StepInputT extends IsNever<InputT, any, Awaited<OutputT>>
   >(
     op: ((i?: StepInputT) => NextOutputT) | ((i: StepInputT) => NextOutputT)
-  ) => PipeFnAsync<IsNever<InputT, StepInputT, InputT>, Resolved<NextOutputT>>;
+  ) => PipeFnAsync<IsNever<InputT, StepInputT, InputT>, Awaited<NextOutputT>>;
 }
 
 export const pipeFnAsync = <InputT = never, OutputT = never>(
@@ -79,18 +78,18 @@ export const pipeFnAsync = <InputT = never, OutputT = never>(
     ) as IsNever<
       InputT,
       () => undefined,
-      (i: InputT) => Promise<Resolved<OutputT>>
+      (i: InputT) => Promise<Awaited<OutputT>>
     >;
   },
   thru: <
     NextOutputT,
-    StepInputT extends IsNever<InputT, any, Resolved<OutputT>>
+    StepInputT extends IsNever<InputT, any, Awaited<OutputT>>
   >(
     op: ((i?: StepInputT) => NextOutputT) | ((i: StepInputT) => NextOutputT)
   ) => {
     return pipeFnAsync<
       IsNever<InputT, StepInputT, InputT>,
-      Resolved<NextOutputT>
+      Awaited<NextOutputT>
     >([...fns, op]);
   },
 });
