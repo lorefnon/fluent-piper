@@ -35,8 +35,6 @@ npm install fluent-piper
 
 ## Usage
 
-### Eager evaluation
-
 ```typescript
 import {pipe} from "fluent-piper";
 
@@ -54,7 +52,7 @@ const result = pipe(10).thru((i: number) => i + 1).thru((i: number) => `Result: 
 //
 ```
 
-### Eager evaluation with async steps
+### With async steps
 
 ```typescript
 import {pipe} from "fluent-piper";
@@ -66,36 +64,9 @@ const result = pipe(10)
 // result: Promise<string>
 ```
 
-### Lazy evaluation with sync steps
-
-```typescript
-import {pipeFn} from "fluent-piper";
-
-const {fn} = pipeFn()
-    .thru((i: number) => i + 1)
-    .thru((i: nmber) => `Result: ${i}`);
-// fn: (i: number) => string;
-
-fn(10); // => "Result: 11"
-```
-
-### Lazy evaluation with async steps
-
-```typescript
-import {pipeFnAsync} from "fluent-piper";
-
-const {fn} = pipeFnAsync()
-    .thru(async (i: number) => i + 1)
-    .thru(async (i: nmber) => `Result: ${i}`);
-// fn: (i: number) => Promise<string>;
-
-fn(10); // => Promise which resolves to "Result: 11"
-```
-
 ## Features
 
 1. No ad-hoc limit on steps being composed
-2. Supports async
-3. Supports both eager and lazy invocations
-4. No dependencies
+1. Supports async
+1. No dependencies
 

@@ -1,4 +1,4 @@
-import { pipe, pipeFn, pipeFnAsync } from '../src';
+import { pipe } from '../src';
 
 describe('pipe', () => {
   it('supports eager composition of synchronous steps', () => {
@@ -28,36 +28,3 @@ describe('pipe', () => {
   });
 });
 
-describe('pipeFn', () => {
-  it('supports lazy composition of sync steps', () => {
-    const result = pipeFn()
-      .thru((i: number) => i + 10)
-      .thru((i: number) => `${i}`).fn;
-    expect(result(10)).toEqual('20');
-  });
-  it('returns undefined in absense of steps', () => {
-    const result = pipeFn().fn;
-    expect(result()).toBe(undefined);
-  });
-});
-
-describe('pipeFnAsync', () => {
-  it('supports lazy composition of async steps', async () => {
-    const result = pipeFnAsync()
-      .thru(async (i: number) => i + 10)
-      .thru(async (i: number) => `${i}`).fn;
-    expect(await result(10)).toEqual('20');
-  });
-  it('returns undefined in absense of steps', async () => {
-    const result = pipeFn().fn;
-    expect(await result()).toBe(undefined);
-  });
-  it('allows intermingling of async and sync steps', async () => {
-    const result = pipeFnAsync()
-      .thru(async (i: number) => i + 10)
-      .thru((i: number) => i + 20)
-      .thru((i: number) => Promise.resolve(i + 1))
-      .thru(async (i: number) => i + 2).fn;
-    expect(await result(1)).toEqual(34);
-  });
-});
