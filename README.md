@@ -90,6 +90,7 @@ const departmentName = await pipe.lazy({ id: 1})
     .thru(fetchUser)
     .await()
     .thru(fetchDepartment)
+    .await()
     .catch(e => {
         // Catch errors thrown from previous steps (sync/async)
         console.error(e);
